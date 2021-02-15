@@ -1,0 +1,71 @@
+version: '3.8'
+services:
+
+# NGINX Web Server
+  nginx:
+    build:
+      context: ./nginx
+    container_name: portal_nginx
+    volumes:
+      - ../:/var/www
+      - ./logs/nginx:/var/log/nginx
+      - ./nginx/sites:/etc/nginx/sites-available
+      - ./nginx/ssl:/etc/nginx/ssl
+    ports:
+      - 80:80
+      - 443:443
+    depends_on:
+      - php-fpm
+    networks: 
+      - app-network
+
+
+# PHP-FPM
+  php-fpm:
+    build:
+      context: ./php-fpm
+    container_name: portal_php-fpm
+    volumes:
+      - ./php-fpm/php.ini:/usr/local/etc/php/php.ini
+      - ../:/var/www
+    working_dir: /var/www
+    networks:
+      - app-network
+
+
+# SQL
+  db:
+    image: mariadb:latest
+    restart: always
+    container_name: portal_mariadb
+    volumes:
+      - ~/sql/portal:/var/lib/mysql
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=secret
+      - MYSQL_DATABASE=portal
+      - MYSQL_USER=portal
+      - MYSQL_PASSWORD=portal
+    networks:
+      - app-network
+
+
+# phpMyAdmin
+  phpmyadmin:
+    image: phpmyadmin:latest
+    restart: always
+    container_name: portal_phpmyadmin
+    ports:
+      - 8081:80
+    environment: 
+      - PMA_HOST=db
+    networks:
+      - app-network
+    
+
+
+#Networks
+networks:
+  app-network:
+    driver: bridge
