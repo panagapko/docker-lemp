@@ -1,5 +1,9 @@
 # Laravel LEMP Stack
 A clean and simple LEMP stack built for a Laravel app. Uses docker and WSL2. 
+- NGINX
+- PHP-FPM
+- MariaDB
+- phpMyAdmin
 
 ### Directory Structure
 ```
