@@ -30,7 +30,9 @@ docker
 - Copy the docker folder into the root directory of your app.
 - Set your project name in the .env file.
 - Change the container_name's in the docker-compose.yml to match your project's name.
-- From your WSL2 shell, cd into the docker directory.
+- In the SQL container config, change 'portal' to your project's name. This folder will persist your SQL data.
+
 ```
+cd docker
 docker-compose up -d
 ```
